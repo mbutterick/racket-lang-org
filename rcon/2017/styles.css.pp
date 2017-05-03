@@ -98,6 +98,7 @@ a:hover {
 
 p {
   margin-bottom: 1rem;
+  mix-blend-mode: darken;
 }
 
 div.subhead {
@@ -146,7 +147,7 @@ div#doc {
   background: white;
   padding-left: 6rem;
   padding-right: 2rem;
-  padding-top: 1rem;
+  padding-top: 2rem;
   padding-bottom: 10rem;
   border: 0px solid black;
   border-top: 0px;
@@ -159,11 +160,15 @@ div#doc {
   line-height: 1;
   transform: skew(-6deg, -12deg);
   ~filter:blur(2px);
-  position: static;
+  position: relative;
+  top: -1rem;
+  left: -2rem;
+
 }
 
 .head div {
   position: absolute;
+  z-index: -1000;
 }
 
 .head#a {
@@ -180,13 +185,14 @@ div#doc {
   font-family: bungee-outline;
 }
 
-.head#c .w { font-family: bungee-regular; }
+.head#c .w { font-family: bungee-regular; 
+text-shadow: 4px 4px grey;}
 
 .c, .m, .y {mix-blend-mode: multiply;}
 .c {color: cyan;}
 .m {color: magenta;}
 .y {color: yellow;}
-.w {mix-blend-mode: lighten; color: white; }
+.w {color: white;}
 
 .movable { transition: transform 6s linear; }
 
@@ -200,13 +206,15 @@ h2 + p {
 
 
 h3 {
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: 300;
+  font-family: bungee-shade;
+  line-height: 1;
   text-transform: uppercase;
   letter-spacing: 0.05rem;
   margin-left: 0;
   margin-top: 1rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
 }
 
 .speaker-name {
@@ -314,6 +322,8 @@ schedule > row + row {
     .head {
         font-size: 2.5rem;
         height: 2rem;
+        top: 0rem;
+        left: 1rem;
     }
 
   .two-col {

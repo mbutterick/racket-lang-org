@@ -86,5 +86,5 @@
   `(div ((class "head") (id ,(format "~a" which)))
         ,@(for/list ([c (in-string "cmyw")])
                     `(div ((class ,(format "movable ~a" c))
-                           (style ,(format "transform: translate3d(~arem,~arem,0)" (- (random 4) 2) (- (random 4) 2)))
+                           (style ,(format "transform: translate3d(~arem,~arem,0)" (- (random 2) 2) (- (random 2) 2)))
                            (id ,(symbol->string (gensym)))) ,@xs))))
