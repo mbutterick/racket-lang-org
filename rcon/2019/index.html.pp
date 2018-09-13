@@ -1,7 +1,8 @@
 #lang pollen
 ◊(require css-tools)
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8" />
 <style type="text/css">
 
 ◊(ffd/rp "libre-barcode-128" "Libre_Barcode_128/LibreBarcode128-Regular.ttf" #:base64 #t)
@@ -9,14 +10,24 @@
 ◊(ffd/rp "plex-dark" "IBM-Plex-Mono/IBMPlexMono-BoldItalic.ttf" #:base64 #t)
 
 body {
-    background: #777;
+    background: #333;
+    margin: 10vw 0;
 }
 
+◊(define racket-red "rgb(157,33,38)")
+◊(define racket-blue "rgb(60,95,165)")
+◊(define anchor "rgb(6, 121, 167)")
 
 .barcode {
     font-family: "libre-barcode-128";
-     font-size: 10vw;
-     opacity: 0.6;
+    font-size: 10vw;
+    opacity: 0.5;
+    line-height: 0.6;
+    padding-top: 0.2em;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+    transform: scale(1, 0.5);
+    text-shadow: none;
 }
 
 * {
@@ -29,10 +40,12 @@ body {
     ◊make-css-ot-features['("ss01" "ss02") '(1 1)];
     margin: 0;
     padding: 0;
+
 }
 
 strong {
     font-family: "plex-dark";
+    text-shadow:  0 0 1.00em #fff, 0 0 1.50em #fff;
 }
 
 body {
@@ -41,6 +54,14 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+input { border: none }
+
+body > div, input {
+      text-shadow:  0 0 1.00em #fff;
+      mix-blend-mode: lighten; 
+}
+
 
 </style>
 
@@ -53,14 +74,21 @@ function append_barcode(el) {
     el.append(barcode_div);
 }
 
+let scaler = 0.3;
+function grow_barcodes() {
+    const bcs = Array.from(document.getElementsByClassName("barcode"));
+    bcs.map(el => el.style.transform = `scale(1, ${scaler+0.1})`);
+    scaler = scaler + 0.003; 
+}
+
 function select_all() { 
     document.execCommand('selectAll', false, null); 
 }
 
-function append_barcodes() {
+function finish_setup() {
     Array.from(document.getElementsByClassName("barcoded")).map(append_barcode);
 
-    const email_field = document.getElementById("email_field");
+    const email_field = document.getElementById("tlemail");
     function sync_email_field() {
         document.getElementById("email_barcode").innerText = email_field.value || "z";
     }
@@ -74,30 +102,43 @@ function update_clock() {
     const reg_opens = new Date("February 1, 2019");
     const now = new Date();
     const diff = reg_opens.getTime() - now.getTime();
-    const clock = document.getElementById("clock");
-    clock.innerText = `in ${Math.floor(diff)}ms`;
-    append_barcode(clock);
+    const new_inner_text = `in ${Math.floor(diff)}ms`;
+    document.getElementById("clock_barcode").innerText = new_inner_text;
+    document.getElementById("clock").innerText = new_inner_text;
+    const next_timeout = Math.pow(5, 1 + Math.random() * 4);
+    window.setTimeout(update_clock, next_timeout);
 }
 
-window.addEventListener("load", append_barcodes);
+window.addEventListener("load", finish_setup);
 window.addEventListener("load", update_clock);
-window.setInterval(update_clock, 512);
+//window.setInterval(grow_barcodes, 100);
+
 
 </script>
 
 </head>
 
 <body>
-<div id="rs" class="barcoded">Racket School</div>
-<div class="barcoded">+ RacketCon</div>
-<div class="barcoded">= <strong>Racket Week</strong></div>
-<div class="barcoded">Salt Lake City UT</div>
-<div class="barcoded">8-14 July 2019</div>
+<div style="margin-bottom:8vw"><img style="width: 10vw" src="http://racket-lang.org/img/racket-logo.svg"></div>
+<div class="barcoded"><strong>Racket Week</strong> 8-14 July 2019</div>
+<div class="barcoded">Salt Lake City UT USA</div>
+<div id="rs" class="barcoded"><strong>Racket School</strong>: two tracks</div>
+<div class="barcoded">How to Design Languages (5 day intensive)</div>
+<div class="barcoded">Beautiful Racket Workshop (3 day gentle)</div>
+<div class="barcoded">followed by <strong>RacketCon</strong></div>
 <div class="barcoded">Registration opens</div>
-<div id="clock" class="barcoded">in 12386797s</div>
-<input id="email_field" style="border:1px solid #ccc" type="email" value="Enter email for updates">
+<div id="clock">in 12386797s</div>
+<div id="clock_barcode" class="barcode">foo</div>
+
+
+<form action="https://tinyletter.com/racketweek" method="post" onsubmit="window.open('https://tinyletter.com/racketweek', 'popupwindow', 'scrollbars=yes,width=800,height=600');return true" target="popupwindow">
+
+<input id="tlemail" name="email" style="border-bottom:1px solid #ccc" type="input" value="Enter email for updates">
 <div id="email_barcode" class="barcode">Enter email for updates</div>
-<input style="padding:0.10em 0.50em;cursor:pointer;border:2px solid white" type="button" value="Submit">
+<input name="embed" type="hidden" value="1"/>
+<input style="padding:0.10em 0.50em;cursor:pointer;border:2px solid white" type="submit" value="Submit" id="submit">
+</form>
+
 
 </body>
 </html>
