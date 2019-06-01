@@ -91,7 +91,7 @@ strong {
     width: 100%;
     height: 100%;
     /* Photo by Wil Stewart https://unsplash.com/photos/T26KCgCPsCI */
-    background: black url(stars3b.jpg);
+    background: #aaa;
     background-size: 100% 100%;
     opacity: 0.4;
     z-index: -10;

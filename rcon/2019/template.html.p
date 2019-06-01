@@ -44,7 +44,6 @@ function toggle_div(id) {
 <body>
 <div class="bg"></div>
 <div class="doc">
-<div class="logo"><img style="width:100px" src="https://racket-lang.org/img/racket-logo.svg"></div>
 ◊(->html doc #:splice #t)</div>
 
 </body>
