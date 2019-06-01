@@ -92,8 +92,9 @@ strong {
     height: 100%;
     /* Photo by Wil Stewart https://unsplash.com/photos/T26KCgCPsCI */
     background: #aaa;
-    background-size: 100% 100%;
-    opacity: 0.4;
+    background: black url(shirtguy.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
     z-index: -10;
 }
 

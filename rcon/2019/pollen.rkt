@@ -69,7 +69,7 @@
 
 (define (make-lines matrix)
   (for/list ([(row y) (in-indexed matrix)])
-            `(rect ((style "fill:#eee")(x "-20")(y ,(~a (+ (* y yunit) 0)))(width "920") (height "2")))))
+            `(rect ((style "fill:#eee")(x "20")(y ,(~a (+ (* y yunit) -1)))(width "600") (height "2")))))
 
 
 (require pollen/unstable/convert)
@@ -81,7 +81,7 @@
   (html->xexpr
    ◊string-append{
  <div class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="-15 -20 ◊(number->string (+ 50 (* 100 max-line-chars))) ◊(number->string (+ 20 (* 10 yunit line-count)))" >
- ◊(string-join (append (map xexpr->html (make-svgs mat)) (map xexpr->html (make-lines mat))))
+ ◊(string-join (append (map xexpr->html (make-svgs mat)) (drop-right (cdr (map xexpr->html (make-lines mat))) 1)))
  </svg></div>}))
 
 

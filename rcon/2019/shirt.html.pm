@@ -7,6 +7,8 @@
 #:unless (regexp-match #px"^\\s+$" str))
 (string->svg  str))))
 
-
+◊div[#:style "border:0px solid red;width:40%;margin: auto;padding-top:55vw"]{
 ◊string->svg{Racket 
-Week 2019}
+Week
+  2019}
+}
