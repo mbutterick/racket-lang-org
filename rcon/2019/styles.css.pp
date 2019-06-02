@@ -1,12 +1,15 @@
 #lang pollen
 ◊(require racket/string css-tools)
 ◊(define dark-color "#000")
-◊(define light-color "#eee")
+◊(define light-color "#ccc")
 ◊(define max-width "1000px")
 ◊(define anchor-color "#cfc")
 ◊(define anchor-bright-color "#efe")
 ◊(define wide-only "@media all and (min-width:1000px)")
 ◊(define mobile-only "@media all and (max-width:580px)")
+
+◊(ffd "cooper-hewitt" "fonts/CooperHewitt-Book.otf" #:base64 #t)
+
 
 ◊(ffd "plex-mono" "fonts/IBMPlexMono-Light.ttf" #:base64 #t)
 ◊(ffd "plex-mono" "fonts/IBMPlexMono-LightItalic.ttf" #:font-style "italic" #:base64 #t)
@@ -30,7 +33,7 @@ html { font-size: 2.4vw; }
 ◊|mobile-only| { html{ font-size: 18px; } }
 
 body {
-   font-family: plex-mono;
+   font-family: cooper-hewitt;
     background: black;
  color: ◊|light-color|;
     margin: 0 auto;
@@ -113,7 +116,6 @@ div.svg + div.svg {
 }
 
 svg {
-    opacity: 0.9;
     mix-blend-mode: lighten;
 }
 

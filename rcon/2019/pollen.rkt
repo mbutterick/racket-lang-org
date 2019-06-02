@@ -1,4 +1,4 @@
-#lang debug pollen/mode racket
+#lang pollen/mode racket
 (require (for-syntax racket/syntax) racket/runtime-path
          racket/draw json txexpr sugar/list pollen/decode racket/string)
 (provide (all-defined-out) xexpr->html)
@@ -16,11 +16,11 @@
 
 (define (int->pixel-row int)
   (reverse (for/list ([bit (in-range 8)])
-                     (if (bitwise-bit-set? int bit) 1 0))))
+             (if (bitwise-bit-set? int bit) 1 0))))
 
 (define cells (list->vector (file->value "vt220.rktd")))
 
-(define (smear p) (bitwise-ior p (arithmetic-shift p -1)))
+(define (smear p) (bitwise-ior p (/ p 2)))
 
 (define (make-matrix str)
   (append*
@@ -28,26 +28,36 @@
              (define cps (map char->integer (string->list str)))
              (define letter-array (apply map list (for/list ([cp (in-list cps)])
                                                             (vector-ref cells (if (= cp 32) 0 cp)))))
-             (drop-right             (for/list ([rows (in-list letter-array)])
-                                               (for/list ([val (append* (add-between (map int->pixel-row (map smear rows)) '(0 0)))])
-                                                         val)) 2))))
+             (for/list ([rows (in-list letter-array)])
+                       (for/list ([val (append* (add-between (map int->pixel-row (map smear rows)) '(0 0)))])
+                                 val)))))
 
 (define (make-jsexpr str)
   (jsexpr->string (make-matrix str)))
 
 (define xunit 10)
-(define yunit 17)
+(define yunit 16)
 
 
 (define (default-cell-proc x y width)
-  (define hstretch 1.8)
-  `(rect ((x ,(format "~a" (* xunit (sub1 x))))
+  (define hstretch 1.5)
+  `(g
+    ,@(for/list ([delta (in-range 0 1 0.25)]
+                 [count (in-naturals)])
+                `(rect ((x ,(format "~a" (* xunit (- x delta))))
+                        (y ,(format "~a" (* yunit (- y 0.5 delta))))
+                        (width ,(format "~a" (* xunit (+ width hstretch))))
+                        (height ,(format "~a" yunit))
+                        (class ,(format "lower-shape layer-~a" count))
+                        (rx ,(format "~a" (/ yunit 2)))
+                        (ry ,(format "~a" (/ yunit 2))))))
+    (rect ((x ,(format "~a" (* xunit (sub1 x))))
            (y ,(format "~a" (* yunit (- (sub1 y) 0.5))))
            (width ,(format "~a" (* xunit (+ width hstretch))))
-           (height ,(format "~a" (- yunit 5)))
+           (height ,(format "~a" (- yunit 0)))
            (class "top-shape")
-           (rx ,(format "~a" (/ xunit 1)))
-           (ry ,(format "~a" (/ xunit 1))))))
+           (rx ,(format "~a" (/ yunit 2)))
+           (ry ,(format "~a" (/ yunit 2)))))))
 
 (define (make-dasharray)
   (string-join (map ~a (flatten (for/list ([i 20])
@@ -57,19 +67,15 @@
   (append
    (append*
     (for/list ([(row y) (in-indexed matrix)])
-               (let loop ([x 0][cols row][gs null])
-                 (match cols
-                   [(== empty) (reverse gs)]
-                   [(list (and zeroes 0) ..1  rest ...)
-                    (loop (+ x (length zeroes)) rest gs)]
-                   [(list (and ones 1) ..1 rest ...)
-                    (define new-g `(g ((class "pixel-on"))
-                                      ,(cell-proc x y (length ones))))
-                    (loop (+ x (length ones)) rest (cons new-g gs))]))))))
-
-(define (make-lines matrix)
-  (for/list ([(row y) (in-indexed matrix)])
-            `(rect ((style "fill:#eee")(x "20")(y ,(~a (+ (* y yunit) -1)))(width "600") (height "2")))))
+              (let loop ([x 0][cols row][gs null])
+                (match cols
+                  [(== empty) (reverse gs)]
+                  [(list (and zeroes 0) ..1  rest ...)
+                   (loop (+ x (length zeroes)) rest gs)]
+                  [(list (and ones 1) ..1 rest ...)
+                   (define new-g `(g ((class "pixel-on"))
+                                     ,(cell-proc x y (length ones))))
+                   (loop (+ x (length ones)) rest (cons new-g gs))]))))))
 
 
 (require pollen/unstable/convert)
@@ -77,11 +83,10 @@
   (define str (apply string-append strs))
   (define max-line-chars (or width (apply max (map string-length strs))))
   (define line-count (length (string-split str "\n")))
-  (define mat (make-matrix str))
   (html->xexpr
    ◊string-append{
  <div class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="-15 -20 ◊(number->string (+ 50 (* 100 max-line-chars))) ◊(number->string (+ 20 (* 10 yunit line-count)))" >
- ◊(string-join (append (map xexpr->html (make-svgs mat)) (drop-right (cdr (map xexpr->html (make-lines mat))) 1)))
+ ◊(string-join (map xexpr->html (make-svgs (make-matrix str))) "")
  </svg></div>}))
 
 
@@ -150,8 +155,8 @@
   (define openness (if open "block" "none"))
   (define div-name (symbol->string (gensym)))
   `(div ((class "speaker-desc"))
-        ,(foldable-subhead div-name title)
-        (,payload-tag ((style ,(format "display:~a;" openness))(id ,div-name) (class ,payload-class)) ,@(detect-paragraphs xs #:force? #t))))
+    ,(foldable-subhead div-name title)
+    (,payload-tag ((style ,(format "display:~a;" openness))(id ,div-name) (class ,payload-class)) ,@(detect-paragraphs xs #:force? #t))))
 
 (define (folded-open title . xs)
   (apply folded title #:open #t xs))
