@@ -16,7 +16,7 @@
 
 (define (int->pixel-row int)
   (reverse (for/list ([bit (in-range 8)])
-             (if (bitwise-bit-set? int bit) 1 0))))
+                     (if (bitwise-bit-set? int bit) 1 0))))
 
 (define cells (list->vector (file->value "vt220.rktd")))
 
@@ -38,9 +38,13 @@
 (define xunit 10)
 (define yunit 16)
 
+(define invert? #f)
+(define colors '("black" "white"))
+(match-define (list fg-color bg-color) (if invert? (reverse colors) colors))
+(define stroke 4)
 
 (define (default-cell-proc x y width)
-  (define hstretch 1.5)
+  (define hstretch 1)
   `(g
     ,@(for/list ([delta (in-range 0 1 0.25)]
                  [count (in-naturals)])
@@ -48,14 +52,21 @@
                         (y ,(format "~a" (* yunit (- y 0.5 delta))))
                         (width ,(format "~a" (* xunit (+ width hstretch))))
                         (height ,(format "~a" yunit))
-                        (class ,(format "lower-shape layer-~a" count))
+                        #;(class ,(format "lower-shape layer-~a" count))
+                        (fill ,bg-color)
+                        ;; make white stroke thicker to completely cover black
+                        (stroke-width ,(~a (if (< count 1) stroke (+ stroke 1))))
+                        (stroke ,(if (< count 1) fg-color bg-color))
                         (rx ,(format "~a" (/ yunit 2)))
                         (ry ,(format "~a" (/ yunit 2))))))
     (rect ((x ,(format "~a" (* xunit (sub1 x))))
            (y ,(format "~a" (* yunit (- (sub1 y) 0.5))))
            (width ,(format "~a" (* xunit (+ width hstretch))))
            (height ,(format "~a" (- yunit 0)))
-           (class "top-shape")
+           #;(class "top-shape")
+           (fill ,fg-color)
+           (stroke-width ,(~a stroke))
+           (stroke ,bg-color)
            (rx ,(format "~a" (/ yunit 2)))
            (ry ,(format "~a" (/ yunit 2)))))))
 
@@ -73,7 +84,7 @@
                   [(list (and zeroes 0) ..1  rest ...)
                    (loop (+ x (length zeroes)) rest gs)]
                   [(list (and ones 1) ..1 rest ...)
-                   (define new-g `(g ((class "pixel-on"))
+                   (define new-g `(g ()
                                      ,(cell-proc x y (length ones))))
                    (loop (+ x (length ones)) rest (cons new-g gs))]))))))
 
@@ -84,10 +95,9 @@
   (define max-line-chars (or width (apply max (map string-length strs))))
   (define line-count (length (string-split str "\n")))
   (html->xexpr
-   ◊string-append{
- <div class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="-15 -20 ◊(number->string (+ 50 (* 100 max-line-chars))) ◊(number->string (+ 20 (* 10 yunit line-count)))" >
+   ◊string-append{<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="-15 -20 ◊(number->string (+ 50 (* 100 max-line-chars))) ◊(number->string (+ 20 (* 10 yunit line-count)))" >
  ◊(string-join (map xexpr->html (make-svgs (make-matrix str))) "")
- </svg></div>}))
+ </svg>}))
 
 
 (define (image src)
@@ -155,8 +165,8 @@
   (define openness (if open "block" "none"))
   (define div-name (symbol->string (gensym)))
   `(div ((class "speaker-desc"))
-    ,(foldable-subhead div-name title)
-    (,payload-tag ((style ,(format "display:~a;" openness))(id ,div-name) (class ,payload-class)) ,@(detect-paragraphs xs #:force? #t))))
+        ,(foldable-subhead div-name title)
+        (,payload-tag ((style ,(format "display:~a;" openness))(id ,div-name) (class ,payload-class)) ,@(detect-paragraphs xs #:force? #t))))
 
 (define (folded-open title . xs)
   (apply folded title #:open #t xs))

@@ -13,7 +13,7 @@ https://www.deluxe.com/products/promotional/district-threads-short-sleeve-perfec
 navy
 }
 
-◊div[#:style "text-align:center;border:0px solid red;width:50%;margin: auto;padding-top:60vw;"]{
+◊div[#:style "text-align:center;border:0px solid red;width:60%;margin: auto;padding-top:60vw;"]{
 ◊string->svg{#lang racket
 (for-each
  displayln
