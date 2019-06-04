@@ -38,12 +38,12 @@
 (define xunit 10)
 (define yunit 16)
 
-(define invert? #f)
-(define colors '("black" "white"))
-(match-define (list fg-color bg-color) (if invert? (reverse colors) colors))
-(define stroke 4)
+(define invert? (make-parameter #f))
 
 (define (default-cell-proc x y width)
+  (define colors '("black" "white"))
+  (match-define (list fg-color bg-color) (if (invert?) (reverse colors) colors))
+  (define stroke 4)
   (define hstretch 1)
   `(g
     ,@(for/list ([delta (in-range 0 1 0.25)]
