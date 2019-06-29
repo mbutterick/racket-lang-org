@@ -14,7 +14,7 @@
      (labels
          ,@(for/list ([label-name (in-list label-names)])
            (match-define (list fn ln) label-name)
-             `(label (fn ,fn) (ln ,ln) (caption "Racket Week 2019"))))))
+             `(label (barcode ,fn) (fn ,fn) (ln ,ln) (caption "Racket Week 2019"))))))
 (define doc
   ◊root{
 ◊lanyard-names{

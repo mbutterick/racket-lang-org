@@ -4,6 +4,7 @@
 ◊(ffd "plex-mono" "fonts/IBMPlexMono-Light.ttf" #:base64 #t)
 ◊(ffd "plex-mono" "fonts/IBMPlexMono-LightItalic.ttf" #:font-style "italic" #:base64 #t)
 ◊(ffd "plex-mono" "fonts/IBMPlexMono-Bold.ttf" #:font-weight "bold" #:base64 #t)
+◊(ffd "barcode" "fonts/LibreBarcode128-Regular.ttf" #:base64 #t)
 
 
 * {
@@ -37,6 +38,14 @@ label {
     padding: 0.75em;
     padding-right: 1em;
 }
+
+label > barcode{
+  display: block;
+  font-family: barcode;
+  line-height: 1;
+  font-size: 54pt;
+}
+
 
 label > fn {
   display: block;
