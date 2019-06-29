@@ -126,7 +126,7 @@
 
 (define-tag-function (label attrs items)
   (decode `(label ,attrs ,@items)
-          #:txexpr-elements-proc detect-paragraphs
+          #:txexpr-elements-proc (λ (es) (decode-paragraphs es #:force? #t))
           #:string-proc (compose1 smart-quotes smart-dashes)))
 
 

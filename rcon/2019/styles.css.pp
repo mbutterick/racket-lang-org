@@ -18,10 +18,9 @@
   color: inherit;
 }
 
-html { font-size: 2.4vw; }
+html { font-size: 20pt; }
 p {
   font-family: plex-mono;
-  margin-bottom: 1rem;
   line-height: 1.45rem;
 }
 
@@ -39,5 +38,20 @@ label.a2, label.b2 {
 
 label {
     border: solid black 0.5px;
+    padding: 0.75em;
+    padding-right: 1em;
+}
+
+label > p:nth-child(1) {
+  font-weight: bold;
+  font-size: 30pt;
+}
+
+label > p:nth-child(2) {
+  font-size: 30pt;
+}
+
+label > p:nth-child(3) {
+  font-size: 15pt;
 }
 

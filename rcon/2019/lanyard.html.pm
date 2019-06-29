@@ -1,31 +1,27 @@
-#lang pollen
-◊(require racket/sequence racket/match racket/string)
-◊(define (make-lanyard-names . names)
+#lang debug br
+(require racket/sequence racket/match racket/string pollen/tag)
+
+(define label (default-tag-function 'label))
+(define root (default-tag-function 'root))
+
+(define (lanyard-names . names)
    (define label-names
      (for/list ([name names]
                 #:unless (equal? name "\n"))
-       (match-define (list fn ln) (string-split name " "))
-       (svgs (string->svg fn) (string->svg ln))))
+       (match-define (cons fn lns) (string-split name " "))
+       (list fn (string-join lns " "))))
    `(lanyard-names
-         ,@(for/list ([label-name-duo (in-slice 2 label-names)])
-           (match-define (list fn ln) label-name-duo)
-           (labels
-            ◊label[#:class "a1"]{◊fn}
-            ◊label[#:class "b1"]{◊ln}
-            ◊label[#:class "a2"]{◊fn}
-            ◊label[#:class "b2"]{◊ln}
-            ))))
+     (labels
+         ,@(for/list ([label-name (in-list label-names)])
+           (match-define (list fn ln) label-name)
+             `(label (p ,fn) (p ,ln) (p "Racket Week 2019"))))))
+(define doc
+  ◊root{
+◊lanyard-names{
+ Wanderley Guimaraes da Silva
+ Matthew Flatt
+ Jay McCarthy
+ Wei Li
+}})
 
-◊lanyard-names[#:decode "exclude"]{
- ◊labels{
- ◊label[#:class "a1"]{Robert Findler
- 
- Racket Week 2019}
-  ◊label[#:class "b1"]{Matthew Flatt
- Racket Week 2019}
-  ◊label[#:class "a2"]{Robert Findler
- Racket Week 2019}
-  ◊label[#:class "b2"]{Matthew Flatt
- Racket Week 2019}
- }
-}
+(provide doc)
