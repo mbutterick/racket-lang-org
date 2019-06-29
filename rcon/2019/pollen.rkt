@@ -1,5 +1,5 @@
 #lang pollen/mode racket
-(require (for-syntax racket/syntax) racket/runtime-path
+(require (for-syntax racket/syntax) racket/runtime-path pollen/tag
          racket/draw json txexpr sugar/list pollen/decode racket/string)
 (provide (all-defined-out) xexpr->html)
 
@@ -123,6 +123,11 @@
           #:string-proc (compose1 smart-quotes smart-dashes)
           #:exclude-tags '(style script pre)
           #:exclude-attrs (list exclusion-mark-attr)))
+
+(define-tag-function (label attrs items)
+  (decode `(label ,attrs ,@items)
+          #:txexpr-elements-proc detect-paragraphs
+          #:string-proc (compose1 smart-quotes smart-dashes)))
 
 
 (define (inline-list tag . xs-in)

@@ -1,6 +1,6 @@
 #lang pollen
 ◊(require racket/sequence racket/match racket/string)
-◊(define (lanyard-names . names)
+◊(define (make-lanyard-names . names)
    (define label-names
      (for/list ([name names]
                 #:unless (equal? name "\n"))
@@ -16,9 +16,16 @@
             ◊label[#:class "b2"]{◊ln}
             ))))
 
-◊lanyard-names{
- Robby Findler
- Matthew Flatt
- Jay McCarthy
- Wei Li
+◊lanyard-names[#:decode "exclude"]{
+ ◊labels{
+ ◊label[#:class "a1"]{Robert Findler
+ 
+ Racket Week 2019}
+  ◊label[#:class "b1"]{Matthew Flatt
+ Racket Week 2019}
+  ◊label[#:class "a2"]{Robert Findler
+ Racket Week 2019}
+  ◊label[#:class "b2"]{Matthew Flatt
+ Racket Week 2019}
+ }
 }
