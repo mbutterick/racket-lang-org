@@ -18,12 +18,6 @@
   color: inherit;
 }
 
-html { font-size: 20pt; }
-p {
-  font-family: plex-mono;
-  line-height: 1.45rem;
-}
-
 
 labels {
     display: grid;
@@ -37,21 +31,29 @@ label.a2, label.b2 {
 }
 
 label {
+    font-family: plex-mono;
+    font-size: 16pt;
     border: solid black 0.5px;
     padding: 0.75em;
     padding-right: 1em;
 }
 
-label > p:nth-child(1) {
+label > fn {
+  display: block;
   font-weight: bold;
+  line-height: 1;
   font-size: 30pt;
 }
 
-label > p:nth-child(2) {
+label > ln {
+  display: block;
+  line-height: 1;
   font-size: 30pt;
 }
 
-label > p:nth-child(3) {
-  font-size: 15pt;
+label > caption {
+  display: block;
+  margin-top: 0.5em;
+  line-height: 1.1;
 }
 
