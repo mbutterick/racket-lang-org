@@ -27,23 +27,28 @@ labels {
     break-after: page;
 }
 
-label.a2, label.b2 {
+label.invert {
     transform: rotate(180deg);
 }
 
 label {
     font-family: plex-mono;
     font-size: 16pt;
-    border: solid black 0.5px;
+    border: solid gray 0.25px;
     padding: 0.75em;
+    padding-top: 0;
     padding-right: 1em;
 }
+
+◊(define big-size 30)
+◊(define big-barcode-size (/ big-size .55))
 
 label > barcode{
   display: block;
   font-family: barcode;
   line-height: 1;
-  font-size: 54pt;
+  font-size: ◊|big-barcode-size|pt;
+  margin-bottom: -0.3em;
 }
 
 
@@ -51,18 +56,18 @@ label > fn {
   display: block;
   font-weight: bold;
   line-height: 1;
-  font-size: 30pt;
+  font-size: ◊|big-size|pt;
 }
 
 label > ln {
   display: block;
   line-height: 1;
-  font-size: 30pt;
+  font-size: ◊|big-size|pt;
 }
 
-label > caption {
+label > week {
   display: block;
-  margin-top: 0.5em;
+  margin-top: 0.25em;
   line-height: 1.1;
 }
 
