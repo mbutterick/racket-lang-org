@@ -34,8 +34,16 @@
   (cons
    'lanyard-names
    (for/list ([names (in-slice 2 label-names)])
-     (cons 'labels
-           (match (map name->label names)
+     `(labels
+           ,@(match (map name->label names)
              [(list label) (list label '(div) (invert label) '(div))]
-             [labels (append labels (map invert labels))])))))
+             [labels (append labels (map invert labels))])
+           (div ((class "crop1")))
+           (div ((class "crop2")))
+           (div ((class "crop3")))
+           (div ((class "crop4")))
+           (div ((class "crop5")))
+           (div ((class "crop6")))
+           (div ((class "crop7")))
+           (div ((class "crop8")))))))
 

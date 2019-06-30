@@ -16,15 +16,35 @@
 
 labels {
     display: grid;
-    grid-template-columns: 3.375in 3.375in;
-    grid-template-rows: 2.375in 2.375in;
+    grid-template-columns: 0.5in 3.375in 3.375in 0.5in;
+    grid-template-rows: 0.5in 2.375in 2.375in 0.5in;
     break-after: page;
+    grid-template-areas: 
+      "c11 c12 c13 c14"
+      "c21 c22 c23 c24"
+      "c31 c32 c33 c34"
+      "c41 c42 c43 c44";
+}
+
+labels > label:nth-child(1) {
+  grid-area: c22;
+}
+
+labels > label:nth-child(2) {
+  grid-area: c23;
+}
+
+labels > label:nth-child(3) {
+  grid-area: c32;
+}
+
+labels > label:nth-child(4) {
+  grid-area: c33;
 }
 
 label {
     font-family: plex-mono;
     font-size: 16pt;
-    border: solid gray 0.25px;
     padding: 0.75em;
     padding-top: 0;
     padding-right: 1em;
@@ -61,3 +81,62 @@ label > week {
   line-height: 1.1;
 }
 
+div.crop1 {
+  grid-area: c12;
+  border-left: 0.5pt solid black;
+  border-right: 0.5pt solid black;
+  position: relative;
+  top: -6pt;
+}
+
+div.crop2 {
+  grid-area: c13;
+  border-right: 0.5pt solid black;
+  position: relative;
+  top: -6pt;
+}
+
+div.crop3 {
+  grid-area: c42;
+  border-left: 0.5pt solid black;
+  border-right: 0.5pt solid black;
+  position: relative;
+  bottom: -6pt;
+}
+
+div.crop4 {
+  grid-area: c43;
+  border-right: 0.5pt solid black;
+  position: relative;
+  bottom: -6pt;
+}
+
+div.crop5 {
+  grid-area: c21;
+  border-top: 0.5pt solid black;
+  border-bottom: 0.5pt solid black;
+  position: relative;
+  left: -6pt;
+}
+
+div.crop6 {
+  grid-area: c31;
+  border-bottom: 0.5pt solid black;
+  position: relative;
+  left: -6pt;
+}
+
+div.crop7 {
+  grid-area: c24;
+  border-top: 0.5pt solid black;
+  border-bottom: 0.5pt solid black;
+  position: relative;
+  right: -6pt;
+}
+
+div.crop8 {
+  grid-area: c34;
+  border-bottom: 0.5pt solid black;
+  position: relative;
+  right: -6pt;
+}
