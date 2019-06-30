@@ -11,24 +11,14 @@
   padding: 0;
   margin: 0;
   border: 0;
-  box-sizing: border-box;
-  font-weight: inherit;
-  font-style: inherit;
-  font-size: inherit;
-  text-decoration: inherit;
-  color: inherit;
 }
 
 
 labels {
     display: grid;
-    grid-template-columns: 3.375in 3.375in ;
+    grid-template-columns: 3.375in 3.375in;
     grid-template-rows: 2.375in 2.375in;
     break-after: page;
-}
-
-label.invert {
-    transform: rotate(180deg);
 }
 
 label {
